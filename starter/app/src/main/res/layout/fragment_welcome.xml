@@ -2,17 +2,27 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
-    <FrameLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         tools:context=".ui.WelcomeFragment">
 
-        <!-- TODO: Update blank fragment layout -->
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal|center_vertical"
-            android:text="WELCOME" />
+            android:layout_gravity="center"
+            android:layout_marginTop="200dp"
+            android:text="Welcome!"
+            android:textAlignment="center" />
 
-    </FrameLayout>
+        <Button
+            android:id="@+id/btn_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="100dp"
+            android:text="@string/read_instructions" />
+
+    </LinearLayout>
 </layout>
