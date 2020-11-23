@@ -12,6 +12,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.ui.NavigationUI
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.FragmentShoelistBinding
 import com.udacity.shoestore.databinding.ShoelistItemBinding
@@ -46,10 +48,8 @@ class ShoeListFragment : Fragment() {
 
         viewModel.itemClicked.observe(viewLifecycleOwner, Observer { evt ->
             if (evt != null) {
-                Toast.makeText(
-                    requireActivity(),
-                    "Shoe with index ${evt.index} selected!",
-                    Toast.LENGTH_LONG).show()
+                val action = ShoeListFragmentDirections.actionShoeListFragmentToShoeDetailFragment(evt.index)
+                findNavController().navigate(action)
                 viewModel.onItemClickFinished()
             }
         })
