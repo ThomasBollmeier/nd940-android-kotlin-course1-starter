@@ -5,11 +5,18 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.FragmentShoelistBinding
+import com.udacity.shoestore.databinding.ShoelistItemBinding
+import com.udacity.shoestore.models.Shoe
+import kotlin.time.Duration
 
 
 /**
@@ -19,7 +26,8 @@ import com.udacity.shoestore.databinding.FragmentShoelistBinding
  */
 class ShoeListFragment : Fragment() {
 
-    private lateinit var sharedViewModel: MainViewModel
+    private val sharedViewModel: MainViewModel by activityViewModels()
+    private lateinit var viewModel: ShoeListViewModel
     private lateinit var binding: FragmentShoelistBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -32,21 +40,42 @@ class ShoeListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_shoelist, container, false)
+        viewModel = ViewModelProvider(this).get(ShoeListViewModel::class.java)
 
-        sharedViewModel = ViewModelProvider(requireActivity()).get(MainViewModel::class.java)
+        sharedViewModel.shoeList.observe(viewLifecycleOwner, Observer(::setShoeItems) )
 
-        sharedViewModel.shoeList.observe(viewLifecycleOwner, Observer { shoes ->
-
-            val shoeListStr = shoes.joinToString("\n") {
-                it.toString()
+        viewModel.itemClicked.observe(viewLifecycleOwner, Observer { evt ->
+            if (evt != null) {
+                Toast.makeText(
+                    requireActivity(),
+                    "Shoe with index ${evt.index} selected!",
+                    Toast.LENGTH_LONG).show()
+                viewModel.onItemClickFinished()
             }
-
-            binding.tvShoeList.text = shoeListStr
-
         })
 
         return binding.root
+    }
 
+    private fun setShoeItems(shoes: List<Shoe>) {
+        binding.layoutShoelist.run {
+            if (childCount > 0) {
+                removeAllViews()
+            }
+            for ((idx, shoe) in shoes.withIndex()) {
+                addShoeListItem(idx, shoe, this)
+            }
+        }
+    }
+
+    private fun addShoeListItem(shoeIdx: Int, shoe: Shoe, group: ViewGroup) {
+
+        val bindingItem: ShoelistItemBinding = DataBindingUtil.inflate(
+            layoutInflater, R.layout.shoelist_item, null, false)
+        bindingItem.shoeItem = ShoeItem(shoeIdx, shoe)
+        bindingItem.model = viewModel
+
+        group.addView(bindingItem.root)
     }
 
     companion object {
