@@ -5,20 +5,15 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
-import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
-import androidx.navigation.ui.NavigationUI
 import com.udacity.shoestore.R
-import com.udacity.shoestore.databinding.FragmentShoelistBinding
+import com.udacity.shoestore.databinding.FragmentShoeListBinding
 import com.udacity.shoestore.databinding.ShoelistItemBinding
 import com.udacity.shoestore.models.Shoe
-import kotlin.time.Duration
 
 
 /**
@@ -30,7 +25,7 @@ class ShoeListFragment : Fragment() {
 
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var viewModel: ShoeListViewModel
-    private lateinit var binding: FragmentShoelistBinding
+    private lateinit var binding: FragmentShoeListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,18 +36,24 @@ class ShoeListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_shoelist, container, false)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fragment_shoe_list, container, false)
         viewModel = ViewModelProvider(this).get(ShoeListViewModel::class.java)
 
-        sharedViewModel.shoeList.observe(viewLifecycleOwner, Observer(::setShoeItems) )
+        sharedViewModel.shoeList.observe(viewLifecycleOwner, Observer(::setShoeItems))
 
         viewModel.itemClicked.observe(viewLifecycleOwner, Observer { evt ->
-            if (evt != null) {
-                val action = ShoeListFragmentDirections.actionShoeListFragmentToShoeDetailFragment(evt.index)
-                findNavController().navigate(action)
-                viewModel.onItemClickFinished()
+            if (evt == null) {
+                return@Observer
             }
+            val action =
+                ShoeListFragmentDirections.actionShoeListFragmentToShoeDetailFragment(evt.index)
+            findNavController().navigate(action)
+            viewModel.onItemClickFinished()
         })
+
+        binding.btnAddShoe.setOnClickListener {
+            viewModel.onItemClicked()
+        }
 
         return binding.root
     }
@@ -71,7 +72,8 @@ class ShoeListFragment : Fragment() {
     private fun addShoeListItem(shoeIdx: Int, shoe: Shoe, group: ViewGroup) {
 
         val bindingItem: ShoelistItemBinding = DataBindingUtil.inflate(
-            layoutInflater, R.layout.shoelist_item, null, false)
+            layoutInflater, R.layout.shoelist_item, null, false
+        )
         bindingItem.shoeItem = ShoeItem(shoeIdx, shoe)
         bindingItem.model = viewModel
 

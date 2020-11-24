@@ -14,4 +14,5 @@
     <string name="read_instructions">Read Instructions</string>
     <string name="to_shoe_list">Show Shoe List</string>
     <string name="double_format">%.1f</string>
+    <string name="add_shoe">Add shoe</string>
 </resources>

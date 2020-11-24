@@ -15,7 +15,7 @@ class ShoeListViewModel: ViewModel() {
     val itemClicked: LiveData<ItemClickedEvent>
         get() = _itemClicked
 
-    fun onItemClicked(index: Int) {
+    fun onItemClicked(index: Int = -1) {
         _itemClicked.value = ItemClickedEvent(index)
     }
 

@@ -8,7 +8,11 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
+import androidx.navigation.ui.NavigationUI
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.FragmentShoeDetailBinding
 
@@ -33,6 +37,20 @@ class ShoeDetailFragment : Fragment() {
         val viewModelFactory = ShoeDetailViewModelFactory(sharedViewModel, args.shoeIdx)
         viewModel = ViewModelProvider(this, viewModelFactory).get(ShoeDetailViewModel::class.java)
         binding.model = viewModel
+
+        viewModel.canceled.observe(viewLifecycleOwner, Observer { canceled ->
+            if (canceled) {
+                findNavController().navigateUp()
+                viewModel.onCanceledFinished()
+            }
+        })
+
+        viewModel.saved.observe(viewLifecycleOwner, Observer { saved ->
+            if (saved) {
+                findNavController().navigateUp()
+                viewModel.onSavedFinished()
+            }
+        })
 
         return binding.root
     }
