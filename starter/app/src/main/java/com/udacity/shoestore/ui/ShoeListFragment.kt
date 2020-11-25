@@ -9,6 +9,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
 import androidx.navigation.fragment.findNavController
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.FragmentShoeListBinding
@@ -25,6 +26,7 @@ class ShoeListFragment : Fragment() {
 
     private val sharedViewModel: MainViewModel by activityViewModels()
     private lateinit var viewModel: ShoeListViewModel
+    private lateinit var itemViewModel: ShoeListItemViewModel
     private lateinit var binding: FragmentShoeListBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,23 +39,33 @@ class ShoeListFragment : Fragment() {
     ): View? {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_shoe_list, container, false)
+
         viewModel = ViewModelProvider(this).get(ShoeListViewModel::class.java)
+        itemViewModel = ViewModelProvider(this).get(ShoeListItemViewModel::class.java)
+
+        binding.model = viewModel
 
         sharedViewModel.shoeList.observe(viewLifecycleOwner, Observer(::setShoeItems))
 
-        viewModel.itemClicked.observe(viewLifecycleOwner, Observer { evt ->
+        viewModel.addClicked.observe(viewLifecycleOwner, Observer { clicked ->
+            if (!clicked) {
+                return@Observer
+            }
+            val action =
+                ShoeListFragmentDirections.actionShoeListFragmentToShoeDetailFragment(-1)
+            findNavController().navigate(action)
+            viewModel.onAddShoeClickFinshed()
+        })
+
+        itemViewModel.itemClicked.observe(viewLifecycleOwner, Observer { evt ->
             if (evt == null) {
                 return@Observer
             }
             val action =
                 ShoeListFragmentDirections.actionShoeListFragmentToShoeDetailFragment(evt.index)
             findNavController().navigate(action)
-            viewModel.onItemClickFinished()
+            itemViewModel.onItemClickFinished()
         })
-
-        binding.btnAddShoe.setOnClickListener {
-            viewModel.onItemClicked()
-        }
 
         return binding.root
     }
@@ -75,7 +87,7 @@ class ShoeListFragment : Fragment() {
             layoutInflater, R.layout.shoelist_item, null, false
         )
         bindingItem.shoeItem = ShoeItem(shoeIdx, shoe)
-        bindingItem.model = viewModel
+        bindingItem.model = itemViewModel
 
         group.addView(bindingItem.root)
     }

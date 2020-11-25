@@ -7,14 +7,14 @@
             type="com.udacity.shoestore.ui.ShoeItem" />
         <variable
             name="model"
-            type="com.udacity.shoestore.ui.ShoeListViewModel" />
+            type="com.udacity.shoestore.ui.ShoeListItemViewModel" />
     </data>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:onClick="@{() -> model.onItemClicked(shoeItem.index)}">
+        android:onClick="@{() -> model.onItemClick(shoeItem.index)}">
 
         <TextView
             android:layout_width="wrap_content"

@@ -1,16 +1,25 @@
 package com.udacity.shoestore.ui
 
+import android.icu.number.NumberFormatter
+import android.icu.number.Precision
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.udacity.shoestore.models.Shoe
+import com.udacity.shoestore.util.doubleToString
+import com.udacity.shoestore.util.stringToDouble
+import java.text.NumberFormat
+import java.util.*
 
 class ShoeDetailViewModelFactory(
     private val sharedViewModel: MainViewModel,
     private val shoeIdx: Int
 ) : ViewModelProvider.Factory {
 
+    @RequiresApi(Build.VERSION_CODES.N)
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(ShoeDetailViewModel::class.java)) {
             return ShoeDetailViewModel(sharedViewModel, shoeIdx) as T
@@ -21,6 +30,7 @@ class ShoeDetailViewModelFactory(
 }
 
 
+@RequiresApi(Build.VERSION_CODES.N)
 class ShoeDetailViewModel(
     private val sharedViewModel: MainViewModel,
     private val shoeIdx: Int
@@ -43,7 +53,7 @@ class ShoeDetailViewModel(
         if (shoeIdx != -1) {
             sharedViewModel.shoeList.value?.get(shoeIdx)?.let { shoe ->
                 name.value = shoe.name
-                size.value = String.format("%.1f", shoe.size)
+                size.value = doubleToString(shoe.size)
                 company.value = shoe.company
                 description.value = shoe.description
             }
@@ -66,32 +76,29 @@ class ShoeDetailViewModel(
         _canceled.value = false
     }
 
+    @RequiresApi(Build.VERSION_CODES.N)
     fun onSaved() {
 
-        val shoeSize = try {
-            size.value?.toDouble() ?: 0.0
-        } catch (e: NumberFormatException) {
-            0.0
-        }
+        val name = name.value ?: ""
+        val size = stringToDouble(size.value ?: "")
+        val company = company.value ?: ""
+        val description = description.value ?: ""
 
         if (shoeIdx != -1) {
-
             sharedViewModel.updateShoe(
                 shoeIdx,
-                name.value ?: "",
-                shoeSize,
-                company.value ?: "",
-                description.value ?: ""
+                name,
+                size,
+                company,
+                description
             )
         } else {
-
             sharedViewModel.addShoe(
-                name.value ?: "",
-                shoeSize,
-                company.value ?: "",
-                description.value ?: ""
+                name,
+                size,
+                company,
+                description
             )
-
         }
         _saved.value = true
     }
@@ -99,4 +106,5 @@ class ShoeDetailViewModel(
     fun onSavedFinished() {
         _saved.value = false
     }
+
 }
