@@ -1,10 +1,8 @@
 package com.udacity.shoestore.ui
 
 import android.os.Bundle
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
@@ -41,11 +39,21 @@ class ShoeListFragment : Fragment() {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_shoe_list, container, false)
 
         viewModel = ViewModelProvider(this).get(ShoeListViewModel::class.java)
-        itemViewModel = ViewModelProvider(this).get(ShoeListItemViewModel::class.java)
-
         binding.model = viewModel
 
+        itemViewModel = ViewModelProvider(this).get(ShoeListItemViewModel::class.java)
+
         sharedViewModel.shoeList.observe(viewLifecycleOwner, Observer(::setShoeItems))
+
+        sharedViewModel.loggedOut.observe(viewLifecycleOwner, Observer { loggedOut ->
+            if (!loggedOut) {
+                return@Observer
+            }
+            val action =
+                ShoeListFragmentDirections.actionShoeListFragmentToLoginFragment()
+            findNavController().navigate(action)
+            sharedViewModel.logoutFinished()
+        })
 
         viewModel.addClicked.observe(viewLifecycleOwner, Observer { clicked ->
             if (!clicked) {
@@ -67,7 +75,23 @@ class ShoeListFragment : Fragment() {
             itemViewModel.onItemClickFinished()
         })
 
+        setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.menu_shoe_list, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return if (item.itemId == R.id.item_logout) {
+            sharedViewModel.logout()
+            true
+        } else {
+            false
+        }
     }
 
     private fun setShoeItems(shoes: List<Shoe>) {

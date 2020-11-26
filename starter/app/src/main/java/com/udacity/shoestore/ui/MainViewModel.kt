@@ -4,12 +4,21 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.udacity.shoestore.models.Shoe
+import com.udacity.shoestore.models.User
 
 class MainViewModel : ViewModel() {
 
     private val _shoeList = MutableLiveData<MutableList<Shoe>>()
     val shoeList : LiveData<MutableList<Shoe>>
         get() = _shoeList
+
+    private val _currentUser = MutableLiveData<User>()
+    val currentUser : LiveData<User>
+        get() = _currentUser
+
+    private var _loggedOut = MutableLiveData<Boolean>(false)
+    val loggedOut: LiveData<Boolean>
+        get() = _loggedOut
 
     init {
 
@@ -18,6 +27,8 @@ class MainViewModel : ViewModel() {
             Shoe("Trail Master", 11.0, "Addidas", "Master your trail runs"),
             Shoe("Air Zoom", 11.0, "Nike", "A good one")
         )
+
+        _currentUser.value = null
 
     }
 
@@ -41,6 +52,23 @@ class MainViewModel : ViewModel() {
                 description: String) {
 
         _shoeList.value?.add(Shoe(name, size, company, description))
+    }
+
+    fun login(email: String, password: String) {
+        _currentUser.value = User(email, password)
+    }
+
+    fun register(email: String, password: String) {
+        _currentUser.value = User(email, password)
+    }
+
+    fun logout() {
+        _loggedOut.value = true
+        _currentUser.value = null
+    }
+
+    fun logoutFinished() {
+        _loggedOut.value = false
     }
 
 }
