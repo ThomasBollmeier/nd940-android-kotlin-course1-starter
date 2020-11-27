@@ -36,6 +36,11 @@ class LoginFragment : Fragment() {
             view.findNavController().navigate(action)
         }
 
+        binding.btnSignup.setOnClickListener { view ->
+            val action = LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
+            view.findNavController().navigate(action)
+        }
+
         return binding.root
     }
 

@@ -22,11 +22,7 @@ class MainViewModel : ViewModel() {
 
     init {
 
-        _shoeList.value = mutableListOf(
-            Shoe("Gel Kayano", 11.5, "Asics", "The classic runner"),
-            Shoe("Trail Master", 11.0, "Addidas", "Master your trail runs"),
-            Shoe("Air Zoom", 11.0, "Nike", "A good one")
-        )
+        _shoeList.value = Shoe.readAll()
 
         _currentUser.value = null
 
