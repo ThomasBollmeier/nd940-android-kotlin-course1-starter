@@ -5,8 +5,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.fragment.app.activityViewModels
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.udacity.shoestore.R
 import com.udacity.shoestore.databinding.FragmentLoginBinding
 
@@ -19,6 +24,8 @@ import com.udacity.shoestore.databinding.FragmentLoginBinding
 class LoginFragment : Fragment() {
     
     private lateinit var binding: FragmentLoginBinding
+    private val sharedViewModel: MainViewModel by activityViewModels()
+    private lateinit var viewModel: LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -31,15 +38,22 @@ class LoginFragment : Fragment() {
         // Inflate the layout for this fragment
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_login, container, false)
 
-        binding.btnLogin.setOnClickListener { view ->
-            val action = LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
-            view.findNavController().navigate(action)
-        }
+        val viewModelFactory = LoginViewModelFactory(sharedViewModel)
+        viewModel = ViewModelProvider(this, viewModelFactory).get(LoginViewModel::class.java)
+        binding.model = viewModel
 
-        binding.btnSignup.setOnClickListener { view ->
-            val action = LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
-            view.findNavController().navigate(action)
-        }
+        viewModel.loginResult.observe(viewLifecycleOwner, Observer { result ->
+            if (result == null) {
+                return@Observer
+            }
+            if (result.success) {
+                val action = LoginFragmentDirections.actionLoginFragmentToWelcomeFragment()
+                findNavController().navigate(action)
+            } else if (result.error != "") {
+                Toast.makeText(requireActivity(), result.error, Toast.LENGTH_LONG).show()
+            }
+            viewModel.loginResultFinished()
+        })
 
         return binding.root
     }

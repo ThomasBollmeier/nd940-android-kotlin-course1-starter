@@ -80,7 +80,11 @@ class ShoeDetailViewModel(
     fun onSaved() {
 
         val name = name.value ?: ""
-        val size = stringToDouble(size.value ?: "")
+        val size = try {
+            stringToDouble(size.value ?: "")
+        } catch (e: java.text.ParseException) {
+            return
+        }
         val company = company.value ?: ""
         val description = description.value ?: ""
 

@@ -3,7 +3,7 @@ package com.udacity.shoestore.models
 data class User(val email: String, private val password: String) {
 
     companion object {
-        fun readAll() = mutableListOf(
+        fun getAll() = mutableListOf(
             User("tbollmeier@web.de", "geheim007")
         )
     }

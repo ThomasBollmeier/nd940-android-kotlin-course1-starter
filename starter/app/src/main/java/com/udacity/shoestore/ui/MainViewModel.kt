@@ -12,6 +12,10 @@ class MainViewModel : ViewModel() {
     val shoeList : LiveData<MutableList<Shoe>>
         get() = _shoeList
 
+    private val _userList = MutableLiveData<MutableList<User>>()
+    val userList: LiveData<MutableList<User>>
+        get() = _userList
+
     private val _currentUser = MutableLiveData<User>()
     val currentUser : LiveData<User>
         get() = _currentUser
@@ -21,11 +25,10 @@ class MainViewModel : ViewModel() {
         get() = _loggedOut
 
     init {
+        _shoeList.value = Shoe.getAll()
 
-        _shoeList.value = Shoe.readAll()
-
+        _userList.value = User.getAll()
         _currentUser.value = null
-
     }
 
     fun updateShoe(index: Int,
@@ -50,12 +53,16 @@ class MainViewModel : ViewModel() {
         _shoeList.value?.add(Shoe(name, size, company, description))
     }
 
-    fun login(email: String, password: String) {
+    fun login(email: String, password: String) : Boolean {
         _currentUser.value = User(email, password)
+        return true
     }
 
-    fun register(email: String, password: String) {
-        _currentUser.value = User(email, password)
+    fun register(email: String, password: String) : Boolean {
+        val newUser = User(email, password)
+        _currentUser.value = newUser
+        _userList.value?.add(newUser)
+        return true
     }
 
     fun logout() {
