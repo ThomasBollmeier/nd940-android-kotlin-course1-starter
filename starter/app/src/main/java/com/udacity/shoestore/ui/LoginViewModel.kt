@@ -24,27 +24,42 @@ class LoginViewModelFactory(
 
 class LoginViewModel(private val sharedViewModel: MainViewModel) : ViewModel() {
 
-    private var _email = MutableLiveData<String>("")
-    val email: LiveData<String>
-        get() = _email
-
-    private var _password = MutableLiveData<String>("")
-    val password: LiveData<String>
-        get() = _password
+    val email = MutableLiveData<String>("")
+    val password = MutableLiveData<String>("")
 
     private var _loginResult = MutableLiveData<LoginResult>(null)
     val loginResult: LiveData<LoginResult>
         get() = _loginResult
 
     fun login() {
-        if (sharedViewModel.login(email.value ?: "", password.value ?: "")) {
+
+        val email = email.value ?: ""
+        val password = password.value ?: ""
+
+        val validationResult = validate(email, password)
+        if (!validationResult.success) {
+            _loginResult.value = validationResult
+            return
+        }
+
+        if (sharedViewModel.login(email, password)) {
             _loginResult.value = LoginResult(true)
+        } else {
+            _loginResult.value = LoginResult(false, "email or password invalid")
         }
     }
 
     fun register() {
+
         val email = email.value ?: ""
         val password = password.value ?: ""
+
+        val validationResult = validate(email, password)
+        if (!validationResult.success) {
+            _loginResult.value = validationResult
+            return
+        }
+
         if (sharedViewModel.register(email, password)) {
             _loginResult.value = LoginResult(true)
         } else {
@@ -54,6 +69,19 @@ class LoginViewModel(private val sharedViewModel: MainViewModel) : ViewModel() {
 
     fun loginResultFinished() {
         _loginResult.value = null
+    }
+
+    private fun validate(email: String, password: String) : LoginResult {
+        if (email.isEmpty()) {
+            return LoginResult(false, "email must not be empty")
+        }
+        if (!email.contains('@')) {
+            return LoginResult(false, "email has invalid format")
+        }
+        if (password.length < 6) {
+            return LoginResult(false, "password must be at least 6 characters long")
+        }
+        return LoginResult(true)
     }
 
 }
