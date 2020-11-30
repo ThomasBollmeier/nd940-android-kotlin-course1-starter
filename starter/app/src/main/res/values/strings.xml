@@ -5,7 +5,6 @@
     <string name="prompt_password">Password</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="welcome">"Welcome!"</string>
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
@@ -23,4 +22,16 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="sign_up">Sign up</string>
+    <string name="welcome_title">Welcome to the Shoe Store!</string>
+    <string name="welcome_content">This is your personal shoe store. It well help you not
+        to forget all the shoes you own. Whenever in doubt what to put on yout feet - just scroll
+        through your shoe list and pick the pair of the day.
+    </string>
+    <string name="instructions_title">How to use the Shoe Store</string>
+    <string name="instructions_content">Using the shoe store is actually easy and intuitive. Press the
+        big "plus"-button to add a new (pair of) shoes. The app lets you enter all the fascinating data
+        about your shoe and save the shoe in your list. If you feel a need to edit a shoe in your
+        list then click on the item in the list.</string>
+    <string name="made_by">Made by: %s</string>
+    <string name="size_info">Size: %s</string>
 </resources>
