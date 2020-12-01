@@ -9,6 +9,11 @@
             type="com.udacity.shoestore.ui.LoginViewModel" />
     </data>
 
+    <!--
+    ConstraintLayout is used here. It makes it relatively easy to align
+    the labels and edit field via horizontal chains and baseline alignment
+    -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

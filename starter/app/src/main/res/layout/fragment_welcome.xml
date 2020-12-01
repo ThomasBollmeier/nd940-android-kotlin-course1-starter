@@ -3,9 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <!--
+    ConstraintLayout is used here to stack the three views in a vertical
+    chain with packed style. By using margins the button on the bottom
+    is separated a little bit from the two text views.
+    -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="100dp"
         tools:context=".ui.WelcomeFragment">
 
         <TextView

@@ -10,6 +10,14 @@
             type="com.udacity.shoestore.ui.ShoeDetailViewModel" />
     </data>
 
+    <!--
+    This form like page uses a constraint layout that allows to
+    align the various labels and their input fields as well as the
+    two buttons at the bottom in horizontal chains with baseline
+    alignments. A vertical chain with packed style puts the related
+    attributes of the shoe near to each other.
+    -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

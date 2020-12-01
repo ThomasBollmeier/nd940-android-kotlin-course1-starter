@@ -14,6 +14,12 @@
             type="com.udacity.shoestore.ui.ShoeListItemViewModel" />
     </data>
 
+    <!--
+    The item layout uses a Constraint layout since it makes it quite easy to
+    position the size right to the shoe's name as well as to put the company
+    attribute below the name
+    -->
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -1,21 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
 
     <data>
+
         <variable
             name="model"
             type="com.udacity.shoestore.ui.ShoeListViewModel" />
     </data>
 
-    <ScrollView
+    <!--
+    A constraint layout is used here to attach the nested scroll view
+    to the top and the favorite action button to the bottom of the page.
+    -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="100dp">
+        android:layout_marginTop="100dp"
+        android:orientation="vertical">
 
-        <LinearLayout
+        <!--
+        ScrollView with an inner LinearLayout are requirements from
+        the project specification.
+        -->
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:layout_height="match_parent"
+            app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
                 android:id="@+id/layout_shoelist"
@@ -23,18 +37,20 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical" />
 
-            <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/btn_add_shoe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="end|bottom"
-                android:layout_margin="16dp"
-                android:contentDescription="@string/add_shoe"
-                android:src="@drawable/ic_add"
-                android:onClick="@{() -> model.onAddShoeClick()}"/>
+        </ScrollView>
 
-        </LinearLayout>
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/btn_add_shoe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_margin="16dp"
+            android:contentDescription="@string/add_shoe"
+            android:onClick="@{() -> model.onAddShoeClick()}"
+            android:src="@drawable/ic_add"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
 
-    </ScrollView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
