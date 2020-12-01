@@ -4,14 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <!--
-    ConstraintLayout is used here to stack the three views in a vertical
-    chain with packed style. By using margins the button on the bottom
-    is separated a little bit from the two text views.
+    A linear layout is used here as we have to simply stack
+    three views vertically on top of each other.
     -->
 
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:orientation="vertical"
         android:layout_marginTop="100dp"
         tools:context=".ui.WelcomeFragment">
 
@@ -19,40 +19,27 @@
             android:id="@+id/tv_welcome_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
+            android:layout_gravity="center_horizontal"
             android:layout_marginBottom="50dp"
             android:text="@string/welcome_title"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/tv_welcome_content"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
+            android:textAlignment="center"/>
 
         <TextView
             android:id="@+id/tv_welcome_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:layout_marginBottom="100dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="50dp"
             android:padding="20dp"
             android:text="@string/welcome_content"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toTopOf="@+id/btn_welcome"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_welcome_title" />
+            android:textAlignment="center"/>
 
         <Button
             android:id="@+id/btn_welcome"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@string/read_instructions"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_welcome_content" />
+            android:text="@string/read_instructions"/>
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+    </LinearLayout>
 </layout>
